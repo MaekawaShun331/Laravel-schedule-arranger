@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('index', ['title' => '予定調整くん']);
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
