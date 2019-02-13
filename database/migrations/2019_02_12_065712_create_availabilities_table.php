@@ -19,6 +19,7 @@ class CreateAvailabilitiesTable extends Migration
             $table->integer('user_id');
             $table->integer('availability');
             $table->uuid('schedule_id')->index();
+            $table->timestamps();
 
             $table->unique(['candidate_id', 'user_id']);
         });

@@ -18,6 +18,7 @@ class CreateCommentsTable extends Migration
             $table->uuid('schedule_id');
             $table->integer('user_id');
             $table->string('comment');
+            $table->timestamps();
 
             $table->unique(['schedule_id', 'user_id']);
         });

@@ -17,6 +17,7 @@ class CreateCandidatesTable extends Migration
             $table->increments('id');
             $table->string('candidate_name');
             $table->uuid('schedule_id')->index();
+            $table->timestamps();
         });
     }
 
