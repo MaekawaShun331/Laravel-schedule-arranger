@@ -26,4 +26,28 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * ユーザに紐付く予定表を取得
+     */
+    public function schedules()
+    {
+        return $this->hasMany('App\Schedule');
+    }
+
+    /**
+     * ユーザに紐付くコメントを取得
+     */
+    public function comments()
+    {
+        return $this->hasMany('App\Comment');
+    }
+
+    /**
+     * ユーザに紐付く出欠を取得
+     */
+    public function availabilities()
+    {
+        return $this->hasMany('App\Availability');
+    }
 }
