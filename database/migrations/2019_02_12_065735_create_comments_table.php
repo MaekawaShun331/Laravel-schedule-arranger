@@ -14,11 +14,12 @@ class CreateCommentsTable extends Migration
     public function up()
     {
         Schema::create('comments', function (Blueprint $table) {
-            $table->uuid('scheduleId');
-            $table->integer('userId');
+            $table->increments('id');
+            $table->uuid('schedule_id');
+            $table->integer('user_id');
             $table->string('comment');
 
-            $table->primary(['scheduleId', 'userId']);
+            $table->unique(['schedule_id', 'user_id']);
         });
     }
 

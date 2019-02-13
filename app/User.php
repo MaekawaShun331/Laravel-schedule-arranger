@@ -32,7 +32,7 @@ class User extends Authenticatable
      */
     public function schedules()
     {
-        return $this->hasMany('App\Schedule', 'createdBy');
+        return $this->hasMany('App\Schedule');
     }
 
     /**
@@ -40,7 +40,7 @@ class User extends Authenticatable
      */
     public function comments()
     {
-        return $this->hasMany('App\Comment', 'userId');
+        return $this->hasMany('App\Comment');
     }
 
     /**
@@ -48,6 +48,6 @@ class User extends Authenticatable
      */
     public function availabilities()
     {
-        return $this->hasMany('App\Availability', 'userId');
+        return $this->hasMany('App\Availability');
     }
 }

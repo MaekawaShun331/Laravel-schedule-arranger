@@ -14,12 +14,13 @@ class CreateAvailabilitiesTable extends Migration
     public function up()
     {
         Schema::create('availabilities', function (Blueprint $table) {
-            $table->integer('candidateId');
-            $table->integer('userId');
+            $table->increments('id');
+            $table->integer('candidate_id');
+            $table->integer('user_id');
             $table->integer('availability');
-            $table->uuid('scheduleId')->index();
+            $table->uuid('schedule_id')->index();
 
-            $table->primary(['candidateId', 'userId']);
+            $table->unique(['candidate_id', 'user_id']);
         });
     }
 

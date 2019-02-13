@@ -14,10 +14,10 @@ class CreateSchedulesTable extends Migration
     public function up()
     {
         Schema::create('schedules', function (Blueprint $table) {
-            $table->uuid('scheduleId')->primary();
-            $table->string('scheduleName');
+            $table->uuid('id')->primary();
+            $table->string('schedule_name');
             $table->string('memo');
-            $table->integer('createdBy');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }

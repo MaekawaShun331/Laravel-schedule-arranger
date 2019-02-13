@@ -7,20 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Availability extends Model
 {
     //複数代入を許可する列
-    protected $fillable = ['candidateId', 'userId', 'availability', 'scheduleId'];
-
-    //primaryKey設定
-    protected $primaryKey = ['candidateId', 'userId'];
-
-    //increment無効化
-    protected $incrementing = false;
+    protected $fillable = ['candidate_id', 'user_id', 'availability', 'schedule_id'];
 
     /**
      * この出欠が紐付いているユーザを取得
      */
     public function user()
     {
-        return $this->belongsTo('App\User', 'userId');
+        return $this->belongsTo('App\User');
     }
 
     /**
@@ -28,6 +22,6 @@ class Availability extends Model
      */
     public function candidate()
     {
-        return $this->belongsTo('App\Candidate', 'candidateId', 'candidateId');
+        return $this->belongsTo('App\Candidate');
     }
 }
