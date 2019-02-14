@@ -49,6 +49,13 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
+        //入力チェック
+        $this->validate($request, [
+            'schedule_name' => 'required|string|max:255',
+            'memo' => 'required|string|max:255',
+            'candidates' => 'required|string|max:255',
+        ]);
+
         //入力された内容でスケジュールを登録する
         $schedule = Schedule::create([
             'schedule_name' => substr($request->input('schedule_name'), 0, 255),
