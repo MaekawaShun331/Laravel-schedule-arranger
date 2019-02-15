@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', '予定調整くん'),
 
     /*
     |--------------------------------------------------------------------------
@@ -120,7 +120,8 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'single'),
+    'log' => env('APP_LOG', 'daily'),
+    'log_max_files' => 30,
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 

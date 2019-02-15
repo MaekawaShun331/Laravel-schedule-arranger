@@ -56,38 +56,46 @@ class ScheduleController extends Controller
             'candidates' => 'required|string|max:255',
         ]);
 
-        //入力された内容でスケジュールを登録する
-        $schedule = Schedule::create([
-            'schedule_name' => substr($request->input('schedule_name'), 0, 255),
-            'memo' => $request->input('memo'),
-            'user_id' => $request->user()->id
-        ]);
+        DB::beginTransaction();
+        try {
+            //入力された内容でスケジュールを登録する
+            $schedule = Schedule::create([
+                'schedule_name' => substr($request->input('schedule_name'), 0, 255),
+                'memo' => $request->input('memo'),
+                'user_id' => $request->user()->id
+            ]);
 
-        //入力された候補日を取り出し、改行で分割して配列にする
-        $candidateNames = preg_split('/\r\n|\r|\n/', $request->input('candidates'));
-        //配列となった候補日にそれぞれtrimをかける
-        $candidateNames = array_map(function ($c) { return trim($c);}, $candidateNames);
-        //trimをかけた上で、空白行と見なされた要素を除外する
-        $candidateNames = array_filter($candidateNames, function ($c) { return $c !== "";});
+            //入力された候補日を取り出し、改行で分割して配列にする
+            $candidateNames = preg_split('/\r\n|\r|\n/', $request->input('candidates'));
+            //配列となった候補日にそれぞれtrimをかける
+            $candidateNames = array_map(function ($c) { return trim($c);}, $candidateNames);
+            //trimをかけた上で、空白行と見なされた要素を除外する
+            $candidateNames = array_filter($candidateNames, function ($c) { return $c !== "";});
 
-        //現在時刻の取得
-        $now = Carbon::now();
-        //候補日をスケジュールIDと合わせてレコード化する
-        $candidates = [];
-        foreach ($candidateNames as $canName) {
-            $candidates[] = [
-                'candidate_name' => $canName,
-                'schedule_id' => $schedule->id,
-                'created_at' => $now,
-                'updated_at' => $now
-            ];
+            //現在時刻の取得
+            $now = Carbon::now();
+            //候補日をスケジュールIDと合わせてレコード化する
+            $candidates = array_map(function ($c) use ($schedule, $now) {
+                return [
+                    'candidate_name' => $c,
+                    'schedule_id' => $schedule->id,
+                    'created_at' => $now,
+                    'updated_at' => $now
+                    ];
+            }, $candidateNames);
+
+            //入力された内容で候補日を登録する
+            DB::table('candidates')->insert($candidates);
+            DB::commit();
+
+            //登録した予定表を表示する
+            return redirect('schedules/' . $schedule->id);
+
+        } catch (\PDOException $e){
+            //データ登録中に例外が発生した場合はロールバックを行う
+            DB::rollBack();
+            throw $e;
         }
-
-        //入力された内容で候補日を登録する
-        DB::table('candidates')->insert($candidates);
-
-        //登録した予定表を表示する
-        return redirect('schedules/' . $schedule->id);
     }
 
     /**
