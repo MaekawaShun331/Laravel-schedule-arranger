@@ -44,6 +44,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        //DB例外の場合、500エラーを起こす
+        if ($exception instanceof \PDOException) {
+            abort(500);
+        }
+
         return parent::render($request, $exception);
     }
 
