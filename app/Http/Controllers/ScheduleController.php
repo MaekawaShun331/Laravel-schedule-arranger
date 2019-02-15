@@ -56,8 +56,7 @@ class ScheduleController extends Controller
             'candidates' => 'required|string|max:255',
         ]);
 
-        DB::beginTransaction();
-        try {
+        DB::transaction(function () use ($request) {
             //入力された内容でスケジュールを登録する
             $schedule = Schedule::create([
                 'schedule_name' => substr($request->input('schedule_name'), 0, 255),
@@ -86,16 +85,10 @@ class ScheduleController extends Controller
 
             //入力された内容で候補日を登録する
             DB::table('candidates')->insert($candidates);
-            DB::commit();
 
             //登録した予定表を表示する
             return redirect('schedules/' . $schedule->id);
-
-        } catch (\PDOException $e){
-            //データ登録中に例外が発生した場合はロールバックを行う
-            DB::rollBack();
-            throw $e;
-        }
+        });
     }
 
     /**
