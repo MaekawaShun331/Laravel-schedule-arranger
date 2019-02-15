@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('index', ['title' => '予定調整くん']);
-});
+Route::get('/', 'IndexController');
 
 Auth::routes();
 
