@@ -8,6 +8,7 @@ use Carbon\Carbon;
 
 use App\Schedule;
 use App\Candidate;
+use App\User;
 
 class ScheduleController extends Controller
 {
@@ -101,12 +102,32 @@ class ScheduleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  String  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        //パラメータのidから予定を取得
+        $schedule = Schedule::find($id);
+        if (!empty($schedule)){
+            //取得した予定から候補日を取得
+            $candindates = Candidate::where('schedule_id', $schedule->id)
+                            ->orderBy('id', 'asc')
+                            ->get();
+            //全ユーザを取得
+            $users = User::all();
+
+            return view('show', [
+                'user' => $request->user(),
+                'schedule' => $schedule,
+                'candidates' => $candindates,
+                'users' => $users
+                ]);
+
+        } else {
+            alert(404);
+        }
     }
 
     /**
