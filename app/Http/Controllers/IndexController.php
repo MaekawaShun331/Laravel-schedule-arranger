@@ -16,16 +16,15 @@ class IndexController extends Controller
      */
     public function __invoke()
     {
-        $title = '予定調整くん';
         $user = Auth::user();
+        $parameters = [];
         //ログインが行われている場合、ユーザの予定表一覧を取得・表示する
-        if (!empty($user)) {
+        if (Auth::check()) {
             $schedules = Schedule::where('user_id', $user->id)
                         ->orderBy('updated_at', 'desc')
                         ->get();
-            return view('index', ['title' => $title, 'user' => $user, 'schedules' => $schedules]);
-        } else {
-            return view('index', ['title' => $title, 'user' => $user]);
+            $parameters = ['user' => $user, 'schedules' => $schedules];
         }
+        return view('index', $parameters);
     }
 }
