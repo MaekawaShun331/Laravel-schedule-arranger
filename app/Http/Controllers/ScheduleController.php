@@ -8,6 +8,7 @@ use Carbon\Carbon;
 
 use App\Schedule;
 use App\Candidate;
+use App\User;
 
 class ScheduleController extends Controller
 {
@@ -56,7 +57,8 @@ class ScheduleController extends Controller
             'candidates' => 'required|string|max:255',
         ]);
 
-        DB::transaction(function () use ($request) {
+        $schedule = null;
+        DB::transaction(function () use ($request, &$schedule) {
             //入力された内容でスケジュールを登録する
             $schedule = Schedule::create([
                 'schedule_name' => substr($request->input('schedule_name'), 0, 255),
@@ -85,21 +87,41 @@ class ScheduleController extends Controller
 
             //入力された内容で候補日を登録する
             DB::table('candidates')->insert($candidates);
-
-            //登録した予定表を表示する
-            return redirect('schedules/' . $schedule->id);
         });
+        //登録した予定表を表示する
+        return redirect(('schedules/' . $schedule->id));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  String  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        //パラメータのidから予定を取得
+        $schedule = Schedule::find($id);
+
+        // 存在しない予定の場合、404エラーを返す
+        if (empty($schedule)){
+            abort(404);
+        }
+
+        //取得した予定から候補日を取得
+        $candindates = Candidate::where('schedule_id', $schedule->id)
+                        ->orderBy('id', 'asc')
+                        ->get();
+        //全ユーザを取得
+        $users = User::all();
+
+        return view('show', [
+            'user' => $request->user(),
+            'schedule' => $schedule,
+            'candidates' => $candindates,
+            'users' => $users
+            ]);
     }
 
     /**
