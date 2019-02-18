@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>{{ $title }}</h1>
-<p>Welcome to {{ $title }}</p>
+<h1>{{ config('app.name', '予定調整くん') }}</h1>
+<p>Welcome to {{ config('app.name', '予定調整くん') }}</p>
   <div>
-    @empty (!$user)
+    @if (Auth::check())
       <div>
         <a href="{{ route('logout') }}"
             onclick="event.preventDefault();
@@ -39,6 +39,6 @@
       <div>
         <a href="{{ route('login') }}">ログイン</a>
       </div>
-    @endempty
+    @endif
   </div>
 @endsection
