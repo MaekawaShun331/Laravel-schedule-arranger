@@ -103,24 +103,25 @@ class ScheduleController extends Controller
     {
         //パラメータのidから予定を取得
         $schedule = Schedule::find($id);
-        if (!empty($schedule)){
-            //取得した予定から候補日を取得
-            $candindates = Candidate::where('schedule_id', $schedule->id)
-                            ->orderBy('id', 'asc')
-                            ->get();
-            //全ユーザを取得
-            $users = User::all();
 
-            return view('show', [
-                'user' => $request->user(),
-                'schedule' => $schedule,
-                'candidates' => $candindates,
-                'users' => $users
-                ]);
-
-        } else {
+        // 存在しない予定の場合、404エラーを返す
+        if (empty($schedule)){
             abort(404);
         }
+
+        //取得した予定から候補日を取得
+        $candindates = Candidate::where('schedule_id', $schedule->id)
+                        ->orderBy('id', 'asc')
+                        ->get();
+        //全ユーザを取得
+        $users = User::all();
+
+        return view('show', [
+            'user' => $request->user(),
+            'schedule' => $schedule,
+            'candidates' => $candindates,
+            'users' => $users
+            ]);
     }
 
     /**
