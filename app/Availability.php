@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Availability extends Model
 {
+    //出欠_欠席:0
+    const AVAILABILE_ABSENCE = 0;
+
     //複数代入を許可する列
     protected $fillable = ['candidate_id', 'user_id', 'availability', 'schedule_id'];
 

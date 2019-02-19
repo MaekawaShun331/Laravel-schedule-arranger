@@ -13,9 +13,6 @@ use App\Availability;
 
 class ScheduleController extends Controller
 {
-    //出欠_欠席:0
-    const AVAILABILE_ABSENCE = 0;
-
     /**
      * Create a new controller instance.
      *
@@ -134,7 +131,7 @@ class ScheduleController extends Controller
 
                 // 出欠Mapの更新
                 // mapの初期化 既に同一ユーザの出欠Mapが作成されていれば読み込む
-                array_key_exists($user_id, $availability_map_map) ? $map = $availability_map_map[$user_id] : $map = [];
+                $map = array_key_exists($user_id, $availability_map_map) ? $availability_map_map[$user_id] : [];
                 // 出欠Mapに出欠データ(キー:候補日ID, 値:出欠)を追加
                 $map[$a->candidate_id] = $a->availability;
 
@@ -172,12 +169,12 @@ class ScheduleController extends Controller
         forEach($users as $u ) {
             $user_id = $u['user_id'];
             // 対象のユーザが出欠Mapに存在するか判定　存在すればその出欠を$mapに確保、存在しなければ空の出欠を作成
-            array_key_exists($user_id, $availability_map_map) ? $map = $availability_map_map[$user_id] : $map = [];
+            $map = array_key_exists($user_id, $availability_map_map) ? $availability_map_map[$user_id] : [];
             forEach($candidates as $c ) {
                 // 対象の候補日に出欠が登録されているか判定　存在しなければ、デフォルト値として 0:欠席 を設定
                 if (!array_key_exists($c->id, $map)){
                     // mapにキー:候補日ID, 値:欠席 でデフォルト値を追加する
-                    $map[$c->id] = self::AVAILABILE_ABSENCE;
+                    $map[$c->id] = Availability::AVAILABILE_ABSENCE;
                     // 出欠MapMapに追加
                     $availability_map_map[$user_id] = $map;
                 }
