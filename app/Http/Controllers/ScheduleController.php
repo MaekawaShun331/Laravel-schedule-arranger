@@ -13,6 +13,9 @@ use App\Availability;
 
 class ScheduleController extends Controller
 {
+    //出欠_欠席:0
+    const AVAILABILE_ABSENCE = 0;
+
     /**
      * Create a new controller instance.
      *
@@ -130,8 +133,8 @@ class ScheduleController extends Controller
                 $user_id = $a->user_id; //TODO ちゃんと入ってるか
 
                 // 出欠Mapの更新
-                // 既に同一ユーザの出欠Mapが作成されていれば読み込む
-                if(array_key_exists($user_id, $availability_map_map)) $map = $availability_map_map[$user_id];
+                // mapの初期化 既に同一ユーザの出欠Mapが作成されていれば読み込む
+                array_key_exists($user_id, $availability_map_map) ? $map = $availability_map_map[$user_id] : $map = [];
                 // 出欠Mapに出欠データ(キー:候補日ID, 値:出欠)を追加
                 $map[$a->candidate_id] = $a->availability;
 
@@ -174,7 +177,7 @@ class ScheduleController extends Controller
                 // 対象の候補日に出欠が登録されているか判定　存在しなければ、デフォルト値として 0:欠席 を設定
                 if (!array_key_exists($c->id, $map)){
                     // mapにキー:候補日ID, 値:欠席 でデフォルト値を追加する
-                    $map[$c->id] = 0;
+                    $map[$c->id] = self::AVAILABILE_ABSENCE;
                     // 出欠MapMapに追加
                     $availability_map_map[$user_id] = $map;
                 }
