@@ -9,15 +9,24 @@
     <tr>
       <th>予定</th>
       @foreach ($users as $user)
-        <th>{{ $user->name}}</th>
+        <th>{{ $user['username']}}</th>
       @endforeach
     </tr>
     @foreach ($candidates as $candidate)
       <tr>
         <th>{{ $candidate->candidate_name }}</th>
         @foreach ($users as $user)
+          @php
+            $map = $availability_map_map[$user['user_id']];
+            $availability = $map[$candidate->id];
+            $availability_labels = ['欠', '？', '出'];
+          @endphp
           <td>
-            <button>欠席</button>
+            @if ($user['is_self'])
+              <button>{{ $availability_labels[$availability] }}</button>
+            @else
+              <p>{{ $availability_labels[$availability] }}</p>
+            @endif
           </td>
         @endforeach
       </tr>
