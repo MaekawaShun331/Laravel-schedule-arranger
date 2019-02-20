@@ -10,6 +10,7 @@ use App\Schedule;
 use App\Candidate;
 use App\User;
 use App\Availability;
+use App\Comment;
 
 class ScheduleController extends Controller
 {
@@ -181,12 +182,21 @@ class ScheduleController extends Controller
             }
         }
 
+        //予定に登録されたコメントの全取得
+        $comments = Comment::where('schedule_id', $schedule->id)
+                    ->get();
+        $comment_map = [];
+        $comments->each(function ($c) use (&$comment_map) {
+            $comment_map[$c->user_id] = $c->comment;
+        });
+
         return view('show', [
             'user' => $request->user(),
             'schedule' => $schedule,
             'candidates' => $candidates,
             'users' => $users,
-            'availability_map_map' => $availability_map_map
+            'availability_map_map' => $availability_map_map,
+            'comment_map' => $comment_map
             ]);
     }
 
