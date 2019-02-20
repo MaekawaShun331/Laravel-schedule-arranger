@@ -44,9 +44,9 @@ class ApiScheduleController extends Controller
                 ->where('id', $candidate_id)
                 ->first();
 
-        // 存在しない候補日の場合、500エラーを表示する
+        // 存在しない候補日の場合、404エラーを表示する
         if(empty($candidate)){
-            abort(500);
+            abort(404);
         }
 
         // 出欠を更新する　出欠が存在しない場合は作成する

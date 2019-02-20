@@ -1,3 +1,5 @@
+var availability_labels = ['欠', '？', '出'];
+
 $('.availability_change').each(function (i, e) {
     var button = $(e);
     button.on('click', function() {
@@ -6,13 +8,15 @@ $('.availability_change').each(function (i, e) {
             { availability: button.data('availability') }
             ,"json")
             .done(function(data) {
-              alert( "second success" + data.availability);
+                button.data('availability', data.availability);
+                button.text(availability_labels[data.availability]);
             })
             .fail(function() {
-              alert( "error" );
-            })
-            .always(function() {
-              alert( "finished" );
+                if (XMLHttpRequest.status = 404){
+                    alert("不正なリクエストです！")
+                }else{
+                    alert("サーバ内部エラーです。");
+                }
             });
     });
 });
