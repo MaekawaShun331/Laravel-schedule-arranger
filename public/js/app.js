@@ -32031,14 +32031,16 @@ module.exports = function spread(callback) {
 /* 35 */
 /***/ (function(module, exports) {
 
-$('#availability_change').on('click', function () {
-  // .phpファイルへのアクセス
-  $.post('api/schedules/' + $('#schedule_name').data('id') + '/candidates/' + $('#availability_change').data('candidate'), { availability: $('#availability_change').data('availability') }, "json").done(function (data) {
-    alert("second success" + data.availability);
-  }).fail(function () {
-    alert("error");
-  }).always(function () {
-    alert("finished");
+$('.availability_change').each(function (i, e) {
+  var button = $(e);
+  button.on('click', function () {
+    $.post('/api/schedules/' + $('#schedule_name').data('id') + '/candidates/' + button.data('candidate'), { availability: button.data('availability') }, "json").done(function (data) {
+      alert("second success" + data.availability);
+    }).fail(function () {
+      alert("error");
+    }).always(function () {
+      alert("finished");
+    });
   });
 });
 
