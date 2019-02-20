@@ -7,9 +7,7 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
-
-require('./schedule');
+// window.Vue = require('vue');
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -17,8 +15,10 @@ require('./schedule');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', require('./components/Example.vue'));
+// Vue.component('example', require('./components/Example.vue'));
 
-const app = new Vue({
-    el: '#app'
-});
+// const app = new Vue({
+//     el: '#app'
+// });
+
+require('./schedule');
