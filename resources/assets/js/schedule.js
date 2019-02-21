@@ -11,9 +11,12 @@ $('.availability_change').each(function (i, e) {
                 button.data('availability', data.availability);
                 button.text(availability_labels[data.availability]);
             })
-            .fail(function() {
-                if (XMLHttpRequest.status = 404){
-                    alert("不正なリクエストです！")
+            .fail(function(xhr) {
+                var status =  xhr.status;
+                if (status == 404){
+                    alert("不正なリクエストです！");
+                }else if (status == 422){
+                    alert(xhr.responseJSON['availability']);
                 }else{
                     alert("サーバ内部エラーです。");
                 }
