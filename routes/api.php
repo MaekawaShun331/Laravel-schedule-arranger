@@ -18,3 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/schedules/{schedule_id}/candidates/{candidate_id}', 'Api\ApiScheduleController@availabilityUpdate');
+
+Route::post('/schedules/{schedule_id}/comment', 'Api\ApiScheduleController@commentCreate');

@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Schedule;
 use App\Candidate;
 use App\Availability;
+use App\Comment;
 
 class ApiScheduleController extends Controller
 {
@@ -56,9 +58,43 @@ class ApiScheduleController extends Controller
 
         // 出欠を更新する　出欠が存在しない場合は作成する
         $availability = Availability::updateOrCreate(
-            ['candidate_id' => $candidate_id, 'user_id' => $user_id, 'schedule_id' => $schedule_id],
+            ['schedule_id' => $schedule_id, 'user_id' => $user_id, 'candidate_id' => $candidate_id],
             ['availability' => $available]
         );
         return response()->json(['availability' => $availability->availability]);
     }
+
+    /**
+     * Create the comment.
+     *
+     * @param  request  $request
+     * @param  String  $schedule_id
+     * @return \Illuminate\Http\Response
+     */
+    public function commentCreate(Request $request, $schedule_id)
+    {
+        //入力チェック
+        $this->validate($request, [
+            'comment' => 'required|string|max:255',
+        ]);
+
+        // ユーザIDの取得
+        $user_id = Auth::user()->id;
+
+        // 渡されたスケジュールIDが存在するかチェック
+        $schedule = Schedule::find($schedule_id);
+
+        // 存在しない候補日の場合、404エラーを表示する
+        if(empty($schedule)){
+            abort(404);
+        }
+
+        // コメントを登録する　既に存在する場合は更新する
+        $comment = Comment::updateOrCreate(
+            ['schedule_id' => $schedule_id, 'user_id' => $user_id],
+            ['comment' => $request->input('comment')]
+        );
+        return response()->json(['comment' => $comment->comment]);
+    }
+
 }
