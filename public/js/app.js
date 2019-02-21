@@ -32044,7 +32044,10 @@ $('.availability_change').each(function (i, e) {
             if (status == 404) {
                 alert("不正なリクエストです！");
             } else if (status == 422) {
-                alert(xhr.responseJSON['availability']);
+                var json = xhr.responseJSON;
+                for (var key in json) {
+                    alert(json[key]);
+                }
             } else {
                 alert("サーバ内部エラーです。");
             }
@@ -32064,7 +32067,10 @@ $('#comment_edit').on('click', function () {
         if (status == 404) {
             alert("不正なリクエストです！");
         } else if (status == 422) {
-            alert(xhr.responseJSON['comment']);
+            var json = xhr.responseJSON;
+            for (var key in json) {
+                alert(json[key]);
+            }
         } else {
             alert("サーバ内部エラーです。");
         }
