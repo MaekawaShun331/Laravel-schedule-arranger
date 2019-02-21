@@ -31,6 +31,11 @@ class ApiScheduleController extends Controller
      */
     public function availabilityUpdate(Request $request, $schedule_id, $candidate_id)
     {
+        //入力チェック
+        $this->validate($request, [
+            'availability' => 'required|integer|max:2',
+        ]);
+
         // ユーザIDの取得
         $user_id = Auth::user()->id;
         // リクエストから出欠を取得
