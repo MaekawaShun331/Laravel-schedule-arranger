@@ -34,9 +34,22 @@ class ApiScheduleController extends Controller
     public function availabilityUpdate(Request $request, $schedule_id, $candidate_id)
     {
         //入力チェック
+        $request['schedule_id'] = $schedule_id;
+        $request['candidate_id'] = $candidate_id;
         $this->validate($request, [
+            'schedule_id' => 'required|string',
+            'candidate_id' => 'required|integer',
             'availability' => 'required|integer|max:2',
         ]);
+        // 渡されたスケジュールID・候補日IDの候補日データが存在するかチェック
+        // schedule_idで先に絞り込む(indexは作成している)
+        // 存在しない候補日の場合、404エラーを返す
+        $candidate = Candidate::where('schedule_id', $schedule_id)
+                ->where('id', $candidate_id)
+                ->first();
+        if(empty($candidate)){
+            abort(404);
+        }
 
         // ユーザIDの取得
         $user_id = Auth::user()->id;
@@ -44,17 +57,6 @@ class ApiScheduleController extends Controller
         $available = $request->input('availability');
         // 出欠を更新　出欠[0:欠席, 1:？, 2:出席]
         $available = ($available + 1) % 3;
-
-        // 渡されたスケジュールID・候補日IDの候補日データが存在するかチェック
-        // schedule_idで先に絞り込む(indexは作成している)
-        $candidate = Candidate::where('schedule_id', $schedule_id)
-                ->where('id', $candidate_id)
-                ->first();
-
-        // 存在しない候補日の場合、404エラーを表示する
-        if(empty($candidate)){
-            abort(404);
-        }
 
         // 出欠を更新する　出欠が存在しない場合は作成する
         $availability = Availability::updateOrCreate(
@@ -74,20 +76,20 @@ class ApiScheduleController extends Controller
     public function commentCreate(Request $request, $schedule_id)
     {
         //入力チェック
+        $request['schedule_id'] = $schedule_id;
         $this->validate($request, [
+            'schedule_id' => 'required|string',
             'comment' => 'required|string|max:255',
         ]);
-
-        // ユーザIDの取得
-        $user_id = Auth::user()->id;
-
         // 渡されたスケジュールIDが存在するかチェック
+        // 存在しない候補日の場合、404エラーを返す
         $schedule = Schedule::find($schedule_id);
-
-        // 存在しない候補日の場合、404エラーを表示する
         if(empty($schedule)){
             abort(404);
         }
+
+        // ユーザIDの取得
+        $user_id = Auth::user()->id;
 
         // コメントを登録する　既に存在する場合は更新する
         $comment = Comment::updateOrCreate(
