@@ -15,7 +15,7 @@ use App\Comment;
 class ScheduleController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * コントローラーのインスタンスを作成します
      *
      * @return void
      */
@@ -25,17 +25,7 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
+     * 新しい予定を作成する為のフォームを表示します
      *
      * @return \Illuminate\Http\Response
      */
@@ -45,7 +35,7 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 新しく作成された予定を保存します
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -95,7 +85,7 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * URLで指定された予定を表示します
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  String  $id
@@ -201,7 +191,7 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * URLで指定された予定を編集する為のフォームを表示します
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -212,7 +202,7 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * URLで指定された登録済みの予定を更新します
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -224,7 +214,7 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * URLで指定された予定をDBから削除します
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
