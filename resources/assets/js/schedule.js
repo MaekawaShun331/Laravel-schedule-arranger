@@ -12,19 +12,7 @@ $('.availability_change').each(function (i, e) {
                 button.text(availability_labels[data.availability]);
             })
             .fail(function(xhr) {
-                var status =  xhr.status;
-                if (status == 400){
-                    alert("不正なリクエストです！");
-                }else if (status == 404){
-                    alert("不正なリクエストです！");
-                }else if (status == 422){
-                    var json = xhr.responseJSON
-                    for(var key in json) {
-                        alert(json[key]);
-                    }
-                }else{
-                    alert("サーバ内部エラーです。");
-                }
+                ajaxFail(xhr);
             });
     });
 });
@@ -41,16 +29,20 @@ $('#comment_edit').on('click', function() {
             $('#comment_self').text(data.comment);
         })
         .fail(function(xhr) {
-            var status =  xhr.status;
-            if (status == 404){
-                alert("不正なリクエストです！");
-            }else if (status == 422){
-                var json = xhr.responseJSON
-                for(var key in json) {
-                    alert(json[key]);
-                }
-            }else{
-                alert("サーバ内部エラーです。");
-            }
+            ajaxFail(xhr);
         });
 });
+
+function ajaxFail(xhr) {
+    var status =  xhr.status;
+    if (status == 400 || status == 404){
+        alert("不正なリクエストです！");
+    }else if (status == 422){
+        var json = xhr.responseJSON
+        for(var key in json) {
+            alert(json[key]);
+        }
+    }else{
+        alert("サーバ内部エラーです。");
+    }
+}
