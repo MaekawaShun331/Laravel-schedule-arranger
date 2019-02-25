@@ -200,11 +200,11 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //入力チェック　候補日に関してはnullを許可する（追加しか出来ないため）
+        //入力チェック　候補日に関してはnullを許可する（画面から追加しか出来ず、他の項目のみ修正したい場合もあるため）
         $this->validate($request, [
             'schedule_name' => 'required|string|max:255',
             'memo' => 'required|string|max:255',
-            'candidates' => 'string|max:255',
+            'candidates' => 'nullable|string|max:255',
         ]);
         // パラメータの予定idを存在確認してから取得
         $schedule = Schedule::scheduleCheck($id);
