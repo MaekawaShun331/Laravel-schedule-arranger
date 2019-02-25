@@ -124,6 +124,13 @@ class ScheduleController extends Controller
         // 閲覧ユーザと出欠に紐づくユーザ(一度でも対象予定表に出欠を登録したユーザ)を格納する
         $user_map = []; // key: user_id, value: userオブジェクト
 
+        // 閲覧ユーザをユーザMapに設定(既に存在する場合は上書き)
+        $login_user_id = $request->user()->id;
+        $user_map[$login_user_id] = [
+            'is_self' =>  true,
+            'user_id' =>  $login_user_id,
+            'username' =>  $request->user()->name
+        ];
         // 出欠データを読み込み、上記二つのMapを作成する
         if($availabilities->isNotEmpty()){
             $availabilities->each(function ($a) use (&$availability_map_map, &$user_map) {
@@ -150,13 +157,6 @@ class ScheduleController extends Controller
             });
         }
 
-        // 閲覧ユーザをユーザMapに設定(既に存在する場合は上書き)
-        $login_user_id = $request->user()->id;
-        $user_map[$login_user_id] = [
-            'is_self' =>  true,
-            'user_id' =>  $login_user_id,
-            'username' =>  $request->user()->name
-        ];
         // ユーザMapをユーザリストに変換
         $users = array_values($user_map);
 

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-  <h4>{{ $schedule->schedule_name }}</h4>
+  <h4 id="schedule_name" data-id="{{ $schedule->id }}">{{ $schedule->schedule_name }}</h4>
   <p style="white-space:pre;">{{ $schedule->memo }}</p>
   <p>作成者: {{ $schedule->user->name}}</p>
   <h3>出欠表</h3>
@@ -23,7 +23,9 @@
           @endphp
           <td>
             @if ($user['is_self'])
-              <button>{{ $availability_labels[$availability] }}</button>
+              <button class="availability_change" data-candidate="{{ $candidate->id }}" data-availability="{{ $availability }}">
+                {{ $availability_labels[$availability] }}
+              </button>
             @else
               <p>{{ $availability_labels[$availability] }}</p>
             @endif
