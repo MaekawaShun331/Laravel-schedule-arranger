@@ -13,7 +13,9 @@ $('.availability_change').each(function (i, e) {
             })
             .fail(function(xhr) {
                 var status =  xhr.status;
-                if (status == 404){
+                if (status == 400){
+                    alert("不正なリクエストです！");
+                }else if (status == 404){
                     alert("不正なリクエストです！");
                 }else if (status == 422){
                     var json = xhr.responseJSON
