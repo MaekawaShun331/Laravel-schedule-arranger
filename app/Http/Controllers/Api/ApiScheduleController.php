@@ -81,15 +81,10 @@ class ApiScheduleController extends Controller
             'schedule_id' => 'required|string',
             'comment' => 'required|string|max:255',
         ]);
-        // 渡されたスケジュールIDが存在するかチェック
-        // 存在しない候補日の場合、404エラーを返す
-        $schedule = Schedule::find($schedule_id);
-        if(empty($schedule)){
-            abort(404);
-        }
-
         // ユーザIDの取得
         $user_id = Auth::user()->id;
+        // パラメータの予定idを存在確認してから取得
+        $schedule = Schedule::scheduleCheck($schedule_id);
 
         // コメントを登録する　既に存在する場合は更新する
         $comment = Comment::updateOrCreate(
