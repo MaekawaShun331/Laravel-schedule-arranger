@@ -37,13 +37,14 @@ class ApiScheduleController extends Controller
      */
     public function availabilityUpdate(Request $request, $schedule_id, $candidate_id)
     {
-        // ユーザIDの取得
-        $user_id = Auth::user()->id;
-        // リクエストから出欠コードを取得し、出欠コードをカウントアップ
-        $available = $request->input('availability') + 1;
-        // 出欠コードが3になった場合は０に戻す
-        $available = $available % 3;
-
+        //入力チェック
+        $request['schedule_id'] = $schedule_id;
+        $request['candidate_id'] = $candidate_id;
+        $this->validate($request, [
+            'schedule_id' => 'required|string',
+            'candidate_id' => 'required|integer',
+            'availability' => 'required|integer|max:2',
+        ]);
         // 渡されたスケジュールID・候補日IDの候補日データが存在するかチェック
         // schedule_idで先に絞り込む(indexは作成している)
         $candidate = Candidate::where('schedule_id', $schedule_id)
@@ -55,9 +56,16 @@ class ApiScheduleController extends Controller
             abort(403);
         }
 
+        // ユーザIDの取得
+        $user_id = Auth::user()->id;
+        // リクエストから出欠コードを取得し、出欠コードをカウントアップ
+        $available = $request->input('availability') + 1;
+        // 出欠コードが3になった場合は０に戻す
+        $available = $available % 3;
+
         // 出欠を更新する　出欠が存在しない場合は作成する
         $availability = Availability::updateOrCreate(
-            ['candidate_id' => $candidate_id, 'user_id' => $user_id, 'schedule_id' => $schedule_id],
+            ['schedule_id' => $schedule_id, 'user_id' => $user_id, 'candidate_id' => $candidate_id],
             ['availability' => $available]
         );
         return response()->json(['availability' => $availability->availability]);
