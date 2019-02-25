@@ -32040,22 +32040,36 @@ $('.availability_change').each(function (i, e) {
             button.data('availability', data.availability);
             button.text(availability_labels[data.availability]);
         }).fail(function (xhr) {
-            var status = xhr.status;
-            if (status == 400) {
-                alert("不正なリクエストです！");
-            } else if (status == 404) {
-                alert("不正なリクエストです！");
-            } else if (status == 422) {
-                var json = xhr.responseJSON;
-                for (var key in json) {
-                    alert(json[key]);
-                }
-            } else {
-                alert("サーバ内部エラーです。");
-            }
+            ajaxFail(xhr);
         });
     });
 });
+
+$('#comment_edit').on('click', function () {
+    input_comment = prompt("コメントを255文字以内で入力してください", "");
+    if (!input_comment) {
+        return;
+    }
+    $.post('/api/schedules/' + $('#schedule_name').data('id') + '/comment/', { comment: input_comment }, "json").done(function (data) {
+        $('#comment_self').text(data.comment);
+    }).fail(function (xhr) {
+        ajaxFail(xhr);
+    });
+});
+
+function ajaxFail(xhr) {
+    var status = xhr.status;
+    if (status == 400 || status == 404) {
+        alert("不正なリクエストです！");
+    } else if (status == 422) {
+        var json = xhr.responseJSON;
+        for (var key in json) {
+            alert(json[key]);
+        }
+    } else {
+        alert("サーバ内部エラーです。");
+    }
+}
 
 /***/ }),
 /* 36 */

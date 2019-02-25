@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Schedule;
 use App\Candidate;
 use App\Availability;
+use App\Comment;
 
 class ApiScheduleController extends Controller
 {
@@ -70,4 +72,38 @@ class ApiScheduleController extends Controller
         );
         return response()->json(['availability' => $availability->availability]);
     }
+
+    /**
+     * Create the comment.
+     *
+     * @param  request  $request
+     * @param  String  $schedule_id
+     * @return \Illuminate\Http\Response
+     */
+    public function commentCreate(Request $request, $schedule_id)
+    {
+        //入力チェック
+        $request['schedule_id'] = $schedule_id;
+        $this->validate($request, [
+            'schedule_id' => 'required|string',
+            'comment' => 'required|string|max:255',
+        ]);
+        // 渡されたスケジュールIDが存在するかチェック
+        // 存在しない候補日の場合、404エラーを返す
+        $schedule = Schedule::find($schedule_id);
+        if(empty($schedule)){
+            abort(404);
+        }
+
+        // ユーザIDの取得
+        $user_id = Auth::user()->id;
+
+        // コメントを登録する　既に存在する場合は更新する
+        $comment = Comment::updateOrCreate(
+            ['schedule_id' => $schedule_id, 'user_id' => $user_id],
+            ['comment' => $request->input('comment')]
+        );
+        return response()->json(['comment' => $comment->comment]);
+    }
+
 }

@@ -33,5 +33,21 @@
         @endforeach
       </tr>
     @endforeach
+    <tr>
+      <th>コメント</th>
+      @foreach ($users as $user)
+        <td>
+          @php
+            $comment = array_key_exists($user['user_id'], $comment_map) ? $comment_map[$user['user_id']] : '';
+          @endphp
+          @if ($user['is_self'])
+            <p id="comment_self">{{ $comment }}</p>
+            <button id="comment_edit">編集</button>
+          @else
+            <p>{{ $comment}}</p>
+          @endif
+        </td>
+      @endforeach
+    </tr>
   </table>
 @endsection
