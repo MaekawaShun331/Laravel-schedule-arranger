@@ -24,7 +24,13 @@ class ApiScheduleController extends Controller
     }
 
     /**
-     * Update the availability.
+     * 出欠を更新します。
+     * 受け取った出欠コードによって、出欠の値を変更します。
+     *   受信　　　更新
+     *  0:欠席 → 1:?
+     *  1:?   → 2:出席
+     *  2:出席 → 0:欠席
+     * ※?は「未定」の意味です。
      *
      * @param  request  $request
      * @param  String  $schedule_id
@@ -43,20 +49,21 @@ class ApiScheduleController extends Controller
         ]);
         // 渡されたスケジュールID・候補日IDの候補日データが存在するかチェック
         // schedule_idで先に絞り込む(indexは作成している)
-        // 存在しない候補日の場合、404エラーを返す
         $candidate = Candidate::where('schedule_id', $schedule_id)
                 ->where('id', $candidate_id)
                 ->first();
+
+        // 存在しない候補日の場合、403エラーを表示する
         if(empty($candidate)){
-            abort(404);
+            abort(403);
         }
 
         // ユーザIDの取得
         $user_id = Auth::user()->id;
-        // リクエストから出欠を取得
-        $available = $request->input('availability');
-        // 出欠を更新　出欠[0:欠席, 1:？, 2:出席]
-        $available = ($available + 1) % 3;
+        // リクエストから出欠コードを取得し、出欠コードをカウントアップ
+        $available = $request->input('availability') + 1;
+        // 出欠コードが3になった場合は０に戻す
+        $available = $available % 3;
 
         // 出欠を更新する　出欠が存在しない場合は作成する
         $availability = Availability::updateOrCreate(
