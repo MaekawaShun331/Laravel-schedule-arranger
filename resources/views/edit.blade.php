@@ -34,4 +34,10 @@
     </div>
     <button type="submit">以上の内容で予定を編集する</button>
   </form>
+  <h3>危険な変更</h3>
+  <form method="POST", action="/schedules/{{ $schedule->id }}">
+    {{ method_field('DELETE') }}
+    {{ csrf_field() }}
+    <button type="submit">この予定を削除する</button>
+  </form>
 @endsection

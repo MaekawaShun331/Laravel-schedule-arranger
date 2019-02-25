@@ -233,7 +233,21 @@ class ScheduleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // パラメータの予定idを存在確認してから取得
+        $schedule = Schedule::scheduleCheck($id);
+        // ユーザが登録した予定か確認
+        $this->checkMineSchedule($schedule);
+        DB::transaction(function () use ($id) {
+            // 予定IDに紐付くコメントを削除
+            Comment::where('schedule_id', $id)->delete();
+            // 予定IDに紐付く出欠を削除
+            Availability::where('schedule_id', $id)->delete();
+            // 予定IDに紐付く候補日を削除
+            Candidate::where('schedule_id', $id)->delete();
+            // 予定を削除
+            Schedule::destroy($id);
+        });
+        return redirect('/');
     }
 
     /**
