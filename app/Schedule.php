@@ -42,9 +42,9 @@ class Schedule extends Model
     public static function scheduleCheck($id)
     {
         $schedule = parent::find($id);
-        //存在しなければ404エラーを返す
+        //存在しなければ403エラーを返す
         if (empty($schedule)){
-            abort(404);
+            abort(403);
         }
         return $schedule;
     }
