@@ -10,34 +10,34 @@
     </ul>
   </div>
 @endif
-  <h3>予定の編集</h3>
+  <h3 class="my-3">予定の編集</h3>
   <form method="POST" action="/schedules/{{ $schedule->id }}">
     {{ method_field('PATCH') }}
     {{ csrf_field() }}
-    <div>
-      <h5>予定名</h5>
-      <input type="text" name="schedule_name" value="{{ $schedule->schedule_name }}">
+    <div class="form-group">
+      <label for="scheduleName">予定名</label>
+      <input class="form-control" type="text" name="schedule_name" value="{{ $schedule->schedule_name }}">
     </div>
-    <div>
-      <h5>メモ</h5>
-      <textarea name="memo">{{ $schedule->memo }}</textarea>
+    <div class="form-group">
+      <label for="memo">メモ</label>
+      <textarea class="form-control" name="memo">{{ $schedule->memo }}</textarea>
     </div>
-    <div>
+    <div class="form-group">
       <label>既存の候補日程</label>
-      <ul>
+      <ul class="list-group">
         @foreach ($candidates as $candidate)
-          <li>{{ $candidate->candidate_name }}</li>
+          <li class="list-group-item">{{ $candidate->candidate_name }}</li>
         @endforeach
       </ul>
-      <p>候補日程の追加 (改行して複数入力してください)</p>
-      <textarea name="candidates"></textarea>
+      <label class="my-2" for="candidates">候補日程の追加 (改行して複数入力してください)</label>
+      <textarea class="form-control" name="candidates"></textarea>
     </div>
-    <button type="submit">以上の内容で予定を編集する</button>
+    <button class="btn btn-info" type="submit">以上の内容で予定を編集する</button>
   </form>
-  <h3>危険な変更</h3>
+  <h3 class="my-3">危険な変更</h3>
   <form method="POST", action="/schedules/{{ $schedule->id }}">
     {{ method_field('DELETE') }}
     {{ csrf_field() }}
-    <button type="submit">この予定を削除する</button>
+    <button class="btn btn-danger" type="submit">この予定を削除する</button>
   </form>
 @endsection

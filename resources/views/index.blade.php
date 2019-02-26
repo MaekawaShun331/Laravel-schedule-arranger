@@ -1,26 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<h1>{{ config('app.name', '予定調整くん') }}</h1>
-<p>Welcome to {{ config('app.name', '予定調整くん') }}</p>
-  <div>
+<div class="jumbotron my-3">
+  <h1 class="display-4">{{ config('app.name', '予定調整くん') }}</h1>
+  <p class="lead">{{ config('app.name', '予定調整くん') }}は、認証が出来る、予定を作って出欠が取れるサービスです</p>
+</div>
     @if (Auth::check())
       <div>
-        <a href="{{ route('logout') }}"
-            onclick="event.preventDefault();
-                      document.getElementById('logout-form').submit();">
-            {{ $user->name }}をログアウト
-        </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
-        </form>
-      </div>
-
-      <div>
-        <a href="/schedules/create">予定を作る</a>
+        <a class="btn btn-info" href="/schedules/create">予定を作る</a>
       @if (count($schedules) > 0)
-        <h3>あなたの作った予定一覧</h3>
-        <table>
+        <h3 class="my-3">あなたの作った予定一覧</h3>
+        <table class="table">
           <tr>
             <th>予定名</th>
             <th>更新日時</th>
@@ -35,10 +25,5 @@
           @endforeach
         </table>
       @endif
-    @else
-      <div>
-        <a href="{{ route('login') }}">ログイン</a>
-      </div>
     @endif
-  </div>
 @endsection

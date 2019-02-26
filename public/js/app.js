@@ -36477,6 +36477,7 @@ module.exports = function spread(callback) {
 /***/ (function(module, exports) {
 
 var availability_labels = ['欠', '？', '出'];
+var buttonStyles = ['btn-danger', 'btn-secondary', 'btn-success'];
 
 $('.availability_change').each(function (i, e) {
     var button = $(e);
@@ -36484,6 +36485,8 @@ $('.availability_change').each(function (i, e) {
         $.post('/api/schedules/' + $('#schedule_name').data('id') + '/candidates/' + button.data('candidate'), { availability: button.data('availability') }, "json").done(function (data) {
             button.data('availability', data.availability);
             button.text(availability_labels[data.availability]);
+            button.removeClass('btn-danger btn-secondary btn-success');
+            button.addClass(buttonStyles[data.availability]);
         }).fail(function (xhr) {
             ajaxFail(xhr);
         });
