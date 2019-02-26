@@ -17,4 +17,4 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('schedules', 'ScheduleController');
+Route::resource('schedules', 'ScheduleController', ['except' => ['index']]);

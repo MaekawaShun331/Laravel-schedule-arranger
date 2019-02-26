@@ -32,4 +32,20 @@ class Schedule extends Model
             $model->{$model->getKeyName()} = Uuid::generate(4)->string;
         });
     }
+
+    /**
+     * 渡されたidで予定の取得と存在確認を行う
+     *
+     * @param String $id
+     * @return Schedule
+     */
+    public static function scheduleCheck($id)
+    {
+        $schedule = parent::find($id);
+        //存在しなければ403エラーを返す
+        if (empty($schedule)){
+            abort(403);
+        }
+        return $schedule;
+    }
 }
