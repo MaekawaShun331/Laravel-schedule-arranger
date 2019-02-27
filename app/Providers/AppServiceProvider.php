@@ -18,8 +18,15 @@ class AppServiceProvider extends ServiceProvider
         if (config('app.env') !== 'production') {
             DB::listen(function ($query) {
                 $sql = $query->sql;
-                for ($i = 0; $i < count($query->bindings); $i++) {
-                    $sql = preg_replace("/\?/", $query->bindings[$i], $sql, 1);
+                foreach ($query->bindings as $binding) {
+                    if (is_string($binding)) {
+                        $binding = "'{$binding}'";
+                    } elseif ($binding === null) {
+                        $binding = 'NULL';
+                    } elseif ($binding instanceof Carbon) {
+                        $binding = "'{$binding->toDateTimeString()}'";
+                    }
+                   $sql = preg_replace("/\?/", $binding, $sql, 1);
                 }
                 \Log::info("Query Time:{$query->time}ms] $sql");
             });
