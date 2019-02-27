@@ -10,20 +10,20 @@
     </ul>
   </div>
 @endif
-  <form method="POST" action="/schedules">
+  <form class="my-3" method="POST" action="/schedules">
     {{ csrf_field() }}
-    <div>
-      <h5>予定名</h5>
-      <input type="text" name="schedule_name">
+    <div class="form-group">
+      <label for="scheduleName">予定名</label>
+      <input class="form-control" type="text" name="schedule_name">
     </div>
-    <div>
-      <h5>メモ</h5>
-      <textarea name="memo"></textarea>
+    <div class="form-group">
+      <label for="memo">メモ</label>
+      <textarea class="form-control" name="memo"></textarea>
     </div>
-    <div>
-      <h5>候補日程 (改行して複数入力してください)</h5>
-      <textarea name="candidates"></textarea>
+    <div class="form-group">
+      <label for="candidates">候補日程 (改行して複数入力してください)</label>
+      <textarea class="form-control" name="candidates"></textarea>
     </div>
-    <button type="submit">予定をつくる</button>
+    <button class="btn btn-info" type="submit">予定をつくる</button>
   </form>
 @endsection
