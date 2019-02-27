@@ -36479,6 +36479,12 @@ module.exports = function spread(callback) {
 var availability_labels = ['欠', '？', '出'];
 var buttonStyles = ['btn-danger', 'btn-secondary', 'btn-success'];
 
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
 $('.availability_change').each(function (i, e) {
     var button = $(e);
     button.on('click', function () {

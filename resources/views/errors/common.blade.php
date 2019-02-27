@@ -35,10 +35,6 @@
                     case 414:
                         $message = 'リクエストURIが長すぎます';
                         break;
-                    case 419:
-                        //CSRFエラー
-                        $message = '不正なリクエストです！';
-                        break;
                     case 500:
                         $message = 'アクセスしようとしたページは表示できませんでした';
                         break;

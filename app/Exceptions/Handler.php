@@ -49,6 +49,10 @@ class Handler extends ExceptionHandler
         if ($exception instanceof \PDOException) {
             abort(500);
         }
+        // web｜apiのルートにて、POSTのリクエストで埋め込むトークンが存在しない｜合わない場合
+        if ($exception instanceof \Illuminate\Session\TokenMismatchException) {
+            abort(400);
+        }
 
         return parent::render($request, $exception);
     }
